@@ -8,8 +8,11 @@ matrix:
   allow_failures:
     - php: 5.5
 
-script:
+before_script:
   - mkdir -p build/logs
+  - composer install --dev --no-interaction
+
+script:
   - php vendor/bin/phpunit
 
 after_success:
