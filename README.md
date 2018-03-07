@@ -117,5 +117,5 @@ $da->transformOutgoingData([]); // TypeError exception.
 $data = new \stdClass();
 $data->lorem = 'caramba!';
 $da->transformIncomingData($data, new Context(['keyName' => 'lorem'])); // 'caramba!'
-$da->transform(['foo']); // TypeError exception.
+$da->transformIncomingData(new NodeObject()); // TypeError exception.
 ```
