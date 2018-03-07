@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: e0ipso
- * Date: 27/02/2018
- * Time: 13:14
- */
 
 namespace Shaper\Tests;
 
@@ -20,9 +14,9 @@ class TransformationFake2 extends TransformationBase {
 
   protected function validatorFactory($type) {
     switch ($type) {
-      case static::INBOUND:
+      case static::BEFORE:
         return new JsonSchemaValidator(['type' => 'number'], new Validator());
-      case static::OUTBOUND:
+      case static::AFTER:
         $schema = ['type' => 'array', 'items' => ['type' => 'number']];
         return new JsonSchemaValidator($schema, new Validator());
       default:
@@ -34,6 +28,23 @@ class TransformationFake2 extends TransformationBase {
     return [$data];
   }
 
+}
+
+class TransformationFail2 extends TransformationFake {
+
+  protected function validatorFactory($type) {
+    switch ($type) {
+      case static::BEFORE:
+      case static::AFTER:
+        return new JsonSchemaValidator(['type' => 'number'], new Validator());
+      default:
+        return new AcceptValidator();
+    }
+  }
+
+  protected function doTransform($data, Context $context) {
+    return 'bar';
+  }
 }
 
 /**
@@ -71,19 +82,17 @@ class TransformationsQueueTest extends TestCase {
   }
 
   /**
-   * @covers ::inboundValidator
+   * @covers ::isApplicable
    */
-  public function testInboundValidator() {
-    $actual = $this->sut->inboundValidator('foo', $this->context)->toJSON();
-    $this->assertEquals('{"type":"string"}', $actual);
+  public function testIsApplicable() {
+    $this->assertFalse($this->sut->isApplicable([], $this->context));
   }
 
   /**
-   * @covers ::outboundValidator
+   * @covers ::conformsToShape
    */
-  public function testOutboundValidator() {
-    $actual = $this->sut->outboundValidator('foo', $this->context)->toJSON();
-    $this->assertEquals('{"type":"array","items":{"type":"number"}}', $actual);
+  public function testConformsToShape() {
+    $this->assertFalse($this->sut->conformsToShape(new \stdClass(), $this->context));
   }
 
 }

@@ -9,34 +9,22 @@ use Shaper\Util\Context;
  *
  * @package Shaper
  */
-abstract class TransformationBase implements TransformationInterface {
+abstract class TransformationBase implements TransformationInterface, TransformationValidationInterface {
+
+  use ValidationTrait;
 
   /**
    * {@inheritdoc}
    */
   public function transform($data, Context $context) {
-    if (!$this->inboundValidator()->isValid($data)) {
+    if (!$this->isApplicable($data, $context)) {
       throw new \TypeError(sprintf('Transformation %s received invalid input data.', __CLASS__));
     }
     $output = $this->doTransform($data, $context);
-    if (!$this->outboundValidator()->isValid($output)) {
+    if (!$this->conformsToShape($output, $context)) {
       throw new \TypeError(sprintf('Transformation %s returned invalid output data.', __CLASS__));
     }
     return $output;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function inboundValidator() {
-    return $this->validatorFactory(static::INBOUND);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function outboundValidator() {
-    return $this->validatorFactory(static::OUTBOUND);
   }
 
   /**
@@ -46,8 +34,8 @@ abstract class TransformationBase implements TransformationInterface {
    * validator based on a JSON Schema, a validator based on instanceof.
    *
    * @param string
-   *   Either static::INBOUND or static::OUTBOUND. The inbound validator checks
-   *   if data coming in is acceptable, the outbound validator checks if data
+   *   Either static::BEFORE or static::AFTER. The before validator checks
+   *   if data coming in is acceptable, the after validator checks if data
    *   going out is acceptable.
    *
    * @return \Shaper\Validator\ValidateableInterface

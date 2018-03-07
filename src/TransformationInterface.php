@@ -11,9 +11,6 @@ use Shaper\Util\Context;
  */
 interface TransformationInterface {
 
-  const INBOUND = 'inbound';
-  const OUTBOUND = 'outbound';
-
   /**
    * Basic transformation from a shape into another shape.
    *
@@ -32,33 +29,5 @@ interface TransformationInterface {
    *   When the transformation cannot be applied.
    */
   public function transform($data, Context $context);
-
-  /**
-   * Gets the validator that checks if the transformation can be applied.
-   *
-   * Typically this is one of three: a validator that accepts everything, a
-   * validator based on a JSON Schema, a validator based on instanceof.
-   *
-   * @param string
-   *   Checks if data coming in is acceptable.
-   *
-   * @return \Shaper\Validator\ValidateableInterface
-   *   The validator.
-   */
-  public function inboundValidator();
-
-  /**
-   * Gets the validator that checks if the transformation yields a valid value.
-   *
-   * Typically this is one of three: a validator that accepts everything, a
-   * validator based on a JSON Schema, a validator based on instanceof.
-   *
-   * @param string
-   *   Checks if data going out is acceptable.
-   *
-   * @return \Shaper\Validator\ValidateableInterface
-   *   The validator.
-   */
-  public function outboundValidator();
 
 }

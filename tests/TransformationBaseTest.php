@@ -14,9 +14,9 @@ class TransformationFake extends TransformationBase {
 
   protected function validatorFactory($type) {
     switch ($type) {
-      case static::INBOUND:
+      case static::BEFORE:
         return new JsonSchemaValidator(['type' => 'string'], new Validator());
-      case static::OUTBOUND:
+      case static::AFTER:
         return new JsonSchemaValidator(['type' => 'number'], new Validator());
       default:
         return new AcceptValidator();
@@ -60,6 +60,8 @@ class TransformationBaseTest extends TestCase {
 
   /**
    * @covers ::transform
+   * @covers ::isApplicable
+   * @covers ::conformsToShape
    */
   public function testTransform() {
     $actual = $this->sut->transform('foo', $this->context);
@@ -71,7 +73,7 @@ class TransformationBaseTest extends TestCase {
   /**
    * @covers ::transform
    */
-  public function testTransformInboundError() {
+  public function testTransformBeforeError() {
     $this->expectException(\TypeError::class);
     $this->sut->transform([], $this->context);
   }
@@ -79,26 +81,10 @@ class TransformationBaseTest extends TestCase {
   /**
    * @covers ::transform
    */
-  public function testTransformOutboundError() {
+  public function testTransformAfterError() {
     $sut = new TransformationFail();
     $this->expectException(\TypeError::class);
     $sut->transform('foo', $this->context);
-  }
-
-  /**
-   * @covers ::inboundValidator
-   */
-  public function testInboundValidator() {
-    $validator = $this->sut->inboundValidator();
-    $this->assertInstanceOf(JsonSchemaValidator::class, $validator);
-  }
-
-  /**
-   * @covers ::outboundValidator
-   */
-  public function testOutboundValidator() {
-    $validator = $this->sut->outboundValidator();
-    $this->assertInstanceOf(JsonSchemaValidator::class, $validator);
   }
 
 }

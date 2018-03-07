@@ -18,9 +18,9 @@ class NumberToArray extends TransformationBase {
 
   protected function validatorFactory($type) {
     switch ($type) {
-      case static::INBOUND:
+      case static::BEFORE:
         return new JsonSchemaValidator(['type' => 'number'], new Validator());
-      case static::OUTBOUND:
+      case static::AFTER:
         $schema = ['type' => 'array', 'items' => ['type' => 'number']];
         return new JsonSchemaValidator($schema, new Validator());
     }
@@ -50,9 +50,9 @@ class ObjectToNumber extends TransformationBase {
 
   protected function validatorFactory($type) {
     switch ($type) {
-      case static::INBOUND:
+      case static::BEFORE:
         return new InstanceofValidator(\stdClass::class);
-      case static::OUTBOUND:
+      case static::AFTER:
         $schema = ['type' => 'number'];
         return new JsonSchemaValidator($schema, new Validator());
     }

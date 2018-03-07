@@ -4,7 +4,7 @@ namespace Shaper;
 
 use Shaper\Util\Context;
 
-class TransformationsQueue extends \SplQueue implements TransformationInterface {
+class TransformationsQueue extends \SplQueue implements TransformationInterface, TransformationValidationInterface {
 
   /**
    * {@inheritdoc}
@@ -20,19 +20,19 @@ class TransformationsQueue extends \SplQueue implements TransformationInterface 
   /**
    * {@inheritdoc}
    */
-  public function inboundValidator() {
-    /** @var \Shaper\TransformationInterface $first_transformation */
+  public function isApplicable($data, Context $context) {
+    /** @var \Shaper\TransformationValidationInterface $first_transformation */
     $first_transformation = $this->bottom();
-    return $first_transformation->inboundValidator();
+    return $first_transformation->isApplicable($data, $context);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function outboundValidator() {
-    /** @var \Shaper\TransformationInterface $last_transformation */
+  public function conformsToShape($data, Context $context) {
+    /** @var \Shaper\TransformationValidationInterface $last_transformation */
     $last_transformation = $this->top();
-    return $last_transformation->outboundValidator();
+    return $last_transformation->conformsToShape($data, $context);
   }
 
 }
