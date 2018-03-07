@@ -5,29 +5,26 @@ namespace Shaper\Tests\DataAdaptor;
 use Shaper\DataAdaptor\DataAdaptorBase;
 use PHPUnit\Framework\TestCase;
 use Shaper\Util\Context;
+use Shaper\Validator\AcceptValidator;
 
 class DataAdaptorFake extends DataAdaptorBase {
-
   protected function doTransformIncomingData($data, Context $context) {
     return $data->{$context['key']};
   }
-
   protected function doTransformOutgoingData($data, Context $context) {
     return (object) [$context['key'] => $data, 'bar' => 'default'];
   }
-
-  public function conformsToExpectedInputShape($data, Context $context) {
-    return TRUE;
+  public function getInputValidator() {
+    return new AcceptValidator();
   }
 
-  public function conformsToInternalShape($data, Context $context) {
-    return TRUE;
+  public function getInternalValidator() {
+    return new AcceptValidator();
   }
 
-  public function conformsToOutputShape($data, Context $context) {
-    return TRUE;
+  public function getOutputValidator() {
+    return new AcceptValidator();
   }
-
 }
 
 class DataAdaptorFake2 extends DataAdaptorFake {
@@ -74,6 +71,8 @@ class DataAdaptorBaseTest extends TestCase {
 
   /**
    * @covers ::transformIncomingData
+   * @covers ::conformsToExpectedInputShape
+   * @covers ::conformsToInternalShape
    */
   public function testTransformIncomingData() {
     $data = new \stdClass();
@@ -106,6 +105,8 @@ class DataAdaptorBaseTest extends TestCase {
 
   /**
    * @covers ::transformOutgoingData
+   * @covers ::conformsToInternalShape
+   * @covers ::conformsToOutputShape
    */
   public function testTransformOutgoingData() {
     $actual = $this->sut->transformOutgoingData('caramba!', $this->context);

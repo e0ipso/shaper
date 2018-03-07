@@ -6,9 +6,6 @@ use Shaper\Util\Context;
 
 interface TransformationValidationInterface {
 
-  const BEFORE = 'before';
-  const AFTER = 'after';
-
   /**
    * Checks if the data provided can be transformed by the validator.
    *
@@ -20,7 +17,7 @@ interface TransformationValidationInterface {
    * @return bool
    *   TRUE if the transformation can be used with the supplied data.
    */
-  public function isApplicable($data, Context $context);
+  public function conformsToInternalShape($data, Context $context);
 
   /**
    * Checks if the transformed data conforms to the expected shape.
@@ -33,6 +30,20 @@ interface TransformationValidationInterface {
    * @return bool
    *   TRUE if the transformed data conforms to the expected shape.
    */
-  public function conformsToShape($data, Context $context);
+  public function conformsToOutputShape($data, Context $context);
+
+  /**
+   * The validator for the input data.
+   *
+   * @return \Shaper\Validator\ValidateableInterface
+   */
+  public function getInputValidator();
+
+  /**
+   * The validator for the output data.
+   *
+   * @return \Shaper\Validator\ValidateableInterface
+   */
+  public function getOutputValidator();
 
 }

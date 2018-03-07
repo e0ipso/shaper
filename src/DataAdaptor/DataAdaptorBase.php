@@ -43,6 +43,27 @@ abstract class DataAdaptorBase implements DataAdaptorInterface, DataAdaptorValid
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function conformsToExpectedInputShape($data, Context $context) {
+    return $this->getInputValidator()->isValid($data);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function conformsToInternalShape($data, Context $context) {
+    return $this->getInternalValidator()->isValid($data);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function conformsToOutputShape($data, Context $context) {
+    return $this->getOutputValidator()->isValid($data);
+  }
+
+  /**
    * Transforms incoming data into another shape.
    *
    * This method will validate data coming in and going out using validators.

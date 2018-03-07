@@ -12,16 +12,13 @@ use Shaper\Validator\JsonSchemaValidator;
 
 class TransformationFake2 extends TransformationBase {
 
-  protected function validatorFactory($type) {
-    switch ($type) {
-      case static::BEFORE:
-        return new JsonSchemaValidator(['type' => 'number'], new Validator());
-      case static::AFTER:
-        $schema = ['type' => 'array', 'items' => ['type' => 'number']];
-        return new JsonSchemaValidator($schema, new Validator());
-      default:
-        return new AcceptValidator();
-    }
+  public function getInputValidator() {
+    return new JsonSchemaValidator(['type' => 'number'], new Validator());
+  }
+
+  public function getOutputValidator() {
+    $schema = ['type' => 'array', 'items' => ['type' => 'number']];
+    return new JsonSchemaValidator($schema, new Validator());
   }
 
   protected function doTransform($data, Context $context) {
@@ -82,17 +79,17 @@ class TransformationsQueueTest extends TestCase {
   }
 
   /**
-   * @covers ::isApplicable
+   * @covers ::getInputValidator
    */
-  public function testIsApplicable() {
-    $this->assertFalse($this->sut->isApplicable([], $this->context));
+  public function testGetInputValidator() {
+    $this->assertFalse($this->sut->conformsToInternalShape([], $this->context));
   }
 
   /**
-   * @covers ::conformsToShape
+   * @covers ::getOutputValidator
    */
-  public function testConformsToShape() {
-    $this->assertFalse($this->sut->conformsToShape(new \stdClass(), $this->context));
+  public function testGetOutputValidator() {
+    $this->assertFalse($this->sut->conformsToOutputShape(new \stdClass(), $this->context));
   }
 
 }
