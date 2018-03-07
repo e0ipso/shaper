@@ -6,6 +6,8 @@ use Shaper\Util\Context;
 
 class TransformationsQueue extends \SplQueue implements TransformationInterface, TransformationValidationInterface {
 
+  use TransformationValidationTrait;
+
   /**
    * {@inheritdoc}
    */
@@ -20,19 +22,19 @@ class TransformationsQueue extends \SplQueue implements TransformationInterface,
   /**
    * {@inheritdoc}
    */
-  public function isApplicable($data, Context $context) {
+  public function getInputValidator() {
     /** @var \Shaper\Transformation\TransformationValidationInterface $first_transformation */
     $first_transformation = $this->bottom();
-    return $first_transformation->isApplicable($data, $context);
+    return $first_transformation->getInputValidator();
   }
 
   /**
    * {@inheritdoc}
    */
-  public function conformsToShape($data, Context $context) {
+  public function getOutputValidator() {
     /** @var \Shaper\Transformation\TransformationValidationInterface $last_transformation */
     $last_transformation = $this->top();
-    return $last_transformation->conformsToShape($data, $context);
+    return $last_transformation->getOutputValidator();
   }
 
 }

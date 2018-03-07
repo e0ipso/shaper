@@ -11,15 +11,12 @@ use Shaper\Validator\JsonSchemaValidator;
 
 class TransformationFake extends TransformationBase {
 
-  protected function validatorFactory($type) {
-    switch ($type) {
-      case static::BEFORE:
-        return new JsonSchemaValidator(['type' => 'string'], new Validator());
-      case static::AFTER:
-        return new JsonSchemaValidator(['type' => 'number'], new Validator());
-      default:
-        return new AcceptValidator();
-    }
+  public function getInputValidator() {
+    return new JsonSchemaValidator(['type' => 'string'], new Validator());
+  }
+
+  public function getOutputValidator() {
+    return new JsonSchemaValidator(['type' => 'number'], new Validator());
   }
 
   protected function doTransform($data, Context $context) {
@@ -59,8 +56,10 @@ class TransformationBaseTest extends TestCase {
 
   /**
    * @covers ::transform
-   * @covers ::isApplicable
-   * @covers ::conformsToShape
+   * @covers ::getInputValidator
+   * @covers ::getOutputValidator
+   * @covers ::conformsToInternalShape
+   * @covers ::conformsToOutputShape
    */
   public function testTransform() {
     $actual = $this->sut->transform('foo', $this->context);

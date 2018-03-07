@@ -11,49 +11,21 @@ use Shaper\Util\Context;
  */
 abstract class TransformationBase implements TransformationInterface, TransformationValidationInterface {
 
+  use TransformationValidationTrait;
+
   /**
    * {@inheritdoc}
    */
   public function transform($data, Context $context) {
-    if (!$this->isApplicable($data, $context)) {
+    if (!$this->conformsToInternalShape($data, $context)) {
       throw new \TypeError(sprintf('Transformation %s received invalid input data.', __CLASS__));
     }
     $output = $this->doTransform($data, $context);
-    if (!$this->conformsToShape($output, $context)) {
+    if (!$this->conformsToOutputShape($output, $context)) {
       throw new \TypeError(sprintf('Transformation %s returned invalid output data.', __CLASS__));
     }
     return $output;
   }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function isApplicable($data, Context $context) {
-    return $this->validatorFactory(static::BEFORE)->isValid($data);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function conformsToShape($data, Context $context) {
-    return $this->validatorFactory(static::AFTER)->isValid($data);
-  }
-
-  /**
-   * Gets the validator that checks if the transformation can be applied.
-   *
-   * Typically this is one of three: a validator that accepts everything, a
-   * validator based on a JSON Schema, a validator based on instanceof.
-   *
-   * @param string
-   *   Either static::BEFORE or static::AFTER. The before validator checks
-   *   if data coming in is acceptable, the after validator checks if data
-   *   going out is acceptable.
-   *
-   * @return \Shaper\Validator\ValidateableInterface
-   *   The validator.
-   */
-  abstract protected function validatorFactory($type);
 
   /**
    * Basic transformation from a shape into another shape.

@@ -6,10 +6,6 @@ use Shaper\Util\Context;
 
 interface DataAdaptorValidationInterface {
 
-  const BEFORE_INCOMING = 'before-incoming';
-  const INTERNAL = 'internal';
-  const AFTER_OUTGOING = 'after-outgoing';
-
   /**
    * Checks if it can transform the provided data to the internal shape.
    *
@@ -48,5 +44,26 @@ interface DataAdaptorValidationInterface {
    *   TRUE if the format is valid.
    */
   public function conformsToOutputShape($data, Context $context);
+
+  /**
+   * The validator for the input data.
+   *
+   * @return \Shaper\Validator\ValidateableInterface
+   */
+  public function getInputValidator();
+
+  /**
+   * The validator for the internal data.
+   *
+   * @return \Shaper\Validator\ValidateableInterface
+   */
+  public function getInternalValidator();
+
+  /**
+   * The validator for the output data.
+   *
+   * @return \Shaper\Validator\ValidateableInterface
+   */
+  public function getOutputValidator();
 
 }
