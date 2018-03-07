@@ -1,11 +1,11 @@
 <?php
 
-namespace Shaper\Tests;
+namespace Shaper\Tests\Transformation;
 
 use JsonSchema\Validator;
 use PHPUnit\Framework\TestCase;
-use Shaper\TransformationBase;
-use Shaper\TransformationsQueue;
+use Shaper\Transformation\TransformationBase;
+use Shaper\Transformation\TransformationsQueue;
 use Shaper\Util\Context;
 use Shaper\Validator\AcceptValidator;
 use Shaper\Validator\JsonSchemaValidator;
@@ -50,12 +50,12 @@ class TransformationFail2 extends TransformationFake {
 /**
  * @package Shaper
  *
- * @coversDefaultClass \Shaper\TransformationsQueue
+ * @coversDefaultClass \Shaper\Transformation\TransformationsQueue
  */
 class TransformationsQueueTest extends TestCase {
 
   /**
-   * @var \Shaper\TransformationsQueue
+   * @var \Shaper\Transformation\TransformationsQueue
    */
   protected $sut;
 

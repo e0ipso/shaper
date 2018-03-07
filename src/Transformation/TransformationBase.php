@@ -1,6 +1,6 @@
 <?php
 
-namespace Shaper;
+namespace Shaper\Transformation;
 
 use Shaper\Util\Context;
 
@@ -10,8 +10,6 @@ use Shaper\Util\Context;
  * @package Shaper
  */
 abstract class TransformationBase implements TransformationInterface, TransformationValidationInterface {
-
-  use ValidationTrait;
 
   /**
    * {@inheritdoc}
@@ -25,6 +23,20 @@ abstract class TransformationBase implements TransformationInterface, Transforma
       throw new \TypeError(sprintf('Transformation %s returned invalid output data.', __CLASS__));
     }
     return $output;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isApplicable($data, Context $context) {
+    return $this->validatorFactory(static::BEFORE)->isValid($data);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function conformsToShape($data, Context $context) {
+    return $this->validatorFactory(static::AFTER)->isValid($data);
   }
 
   /**
@@ -51,7 +63,6 @@ abstract class TransformationBase implements TransformationInterface, Transforma
    *
    * @param mixed $data
    *   The data to transform.
-   *
    * @param \Shaper\Util\Context $context
    *   Additional information that will affect how the data is transformed.
    *

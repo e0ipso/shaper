@@ -1,6 +1,6 @@
 <?php
 
-namespace Shaper;
+namespace Shaper\Transformation;
 
 use Shaper\Util\Context;
 
@@ -21,7 +21,7 @@ class TransformationsQueue extends \SplQueue implements TransformationInterface,
    * {@inheritdoc}
    */
   public function isApplicable($data, Context $context) {
-    /** @var \Shaper\TransformationValidationInterface $first_transformation */
+    /** @var \Shaper\Transformation\TransformationValidationInterface $first_transformation */
     $first_transformation = $this->bottom();
     return $first_transformation->isApplicable($data, $context);
   }
@@ -30,7 +30,7 @@ class TransformationsQueue extends \SplQueue implements TransformationInterface,
    * {@inheritdoc}
    */
   public function conformsToShape($data, Context $context) {
-    /** @var \Shaper\TransformationValidationInterface $last_transformation */
+    /** @var \Shaper\Transformation\TransformationValidationInterface $last_transformation */
     $last_transformation = $this->top();
     return $last_transformation->conformsToShape($data, $context);
   }
