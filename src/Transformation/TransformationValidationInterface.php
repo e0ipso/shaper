@@ -1,6 +1,6 @@
 <?php
 
-namespace Shaper;
+namespace Shaper\Transformation;
 
 use Shaper\Util\Context;
 

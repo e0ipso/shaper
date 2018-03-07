@@ -1,11 +1,10 @@
 <?php
 
-namespace Shaper\Tests;
+namespace Shaper\Tests\Transformation;
 
 use JsonSchema\Validator;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
-use Shaper\TransformationBase;
+use Shaper\Transformation\TransformationBase;
 use Shaper\Util\Context;
 use Shaper\Validator\AcceptValidator;
 use Shaper\Validator\JsonSchemaValidator;
@@ -38,12 +37,12 @@ class TransformationFail extends TransformationFake {
 /**
  * @package Shaper
  *
- * @coversDefaultClass \Shaper\TransformationBase
+ * @coversDefaultClass \Shaper\Transformation\TransformationBase
  */
 class TransformationBaseTest extends TestCase {
 
   /**
-   * @var \Shaper\Tests\TransformationFake
+   * @var \Shaper\Tests\Transformation\TransformationFake
    */
   protected $sut;
 
@@ -52,7 +51,7 @@ class TransformationBaseTest extends TestCase {
    */
   protected $context;
 
-  protected function setUp()/* The :void return type declaration that should be here would cause a BC issue */ {
+  protected function setUp() {
     parent::setUp();
     $this->sut = new TransformationFake();
     $this->context = new Context();
