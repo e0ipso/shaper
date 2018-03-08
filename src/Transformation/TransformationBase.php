@@ -17,7 +17,7 @@ abstract class TransformationBase implements TransformationInterface, Transforma
    * {@inheritdoc}
    */
   public function transform($data, Context $context) {
-    if (!$this->conformsToInternalShape($data, $context)) {
+    if (!$this->conformsToExpectedInputShape($data, $context)) {
       throw new \TypeError(sprintf('Transformation %s received invalid input data.', __CLASS__));
     }
     $output = $this->doTransform($data, $context);

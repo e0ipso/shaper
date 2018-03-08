@@ -8,10 +8,10 @@ use Shaper\Util\Context;
 use Shaper\Validator\AcceptValidator;
 
 class DataAdaptorFake extends DataAdaptorBase {
-  protected function doTransformIncomingData($data, Context $context) {
+  protected function doTransform($data, Context $context) {
     return $data->{$context['key']};
   }
-  protected function doTransformOutgoingData($data, Context $context) {
+  protected function doUndoTransform($data, Context $context) {
     return (object) [$context['key'] => $data, 'bar' => 'default'];
   }
   public function getInputValidator() {
@@ -70,46 +70,46 @@ class DataAdaptorBaseTest extends TestCase {
   }
 
   /**
-   * @covers ::transformIncomingData
+   * @covers ::transform
    * @covers ::conformsToExpectedInputShape
    * @covers ::conformsToInternalShape
    */
-  public function testTransformIncomingData() {
+  public function testtransform() {
     $data = new \stdClass();
     $data->lorem = 'caramba!';
-    $actual = $this->sut->transformIncomingData($data, $this->context);
+    $actual = $this->sut->transform($data, $this->context);
     $this->assertSame('caramba!', $actual);
   }
 
   /**
-   * @covers ::transformIncomingData
+   * @covers ::transform
    */
-  public function testTransformIncomingDataErrorInput() {
+  public function testtransformErrorInput() {
     $sut = new DataAdaptorFake2();
     $data = new \stdClass();
     $data->lorem = 'caramba!';
     $this->expectException(\TypeError::class);
-    $sut->transformIncomingData($data, $this->context);
+    $sut->transform($data, $this->context);
   }
 
   /**
-   * @covers ::transformIncomingData
+   * @covers ::transform
    */
-  public function testTransformIncomingDataErrorOutput() {
+  public function testtransformErrorOutput() {
     $sut = new DataAdaptorFake3();
     $data = new \stdClass();
     $data->lorem = 'caramba!';
     $this->expectException(\TypeError::class);
-    $sut->transformIncomingData($data, $this->context);
+    $sut->transform($data, $this->context);
   }
 
   /**
-   * @covers ::transformOutgoingData
+   * @covers ::undoTransform
    * @covers ::conformsToInternalShape
    * @covers ::conformsToOutputShape
    */
-  public function testTransformOutgoingData() {
-    $actual = $this->sut->transformOutgoingData('caramba!', $this->context);
+  public function testundoTransform() {
+    $actual = $this->sut->undoTransform('caramba!', $this->context);
     $expected = new \stdClass();
     $expected->lorem = 'caramba!';
     $expected->bar = 'default';
@@ -117,27 +117,27 @@ class DataAdaptorBaseTest extends TestCase {
   }
 
   /**
-   * @covers ::transformOutgoingData
+   * @covers ::undoTransform
    */
-  public function testTransformOutgoingDataErrorInput() {
+  public function testundoTransformErrorInput() {
     $sut = new DataAdaptorFake3();
     $expected = new \stdClass();
     $expected->lorem = 'caramba!';
     $expected->bar = 'default';
     $this->expectException(\TypeError::class);
-    $sut->transformOutgoingData('caramba!', $this->context);
+    $sut->undoTransform('caramba!', $this->context);
   }
 
   /**
-   * @covers ::transformOutgoingData
+   * @covers ::undoTransform
    */
-  public function testTransformOutgoingDataErrorOutput() {
+  public function testundoTransformErrorOutput() {
     $sut = new DataAdaptorFake4();
     $expected = new \stdClass();
     $expected->lorem = 'caramba!';
     $expected->bar = 'default';
     $this->expectException(\TypeError::class);
-    $sut->transformOutgoingData('caramba!', $this->context);
+    $sut->undoTransform('caramba!', $this->context);
   }
 
 }
