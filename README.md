@@ -119,3 +119,6 @@ $da->transform(new NodeObject()); // TypeError exception.
 $da->undoTransform('caramba!', new Context(['keyName' => 'lorem'])); // (object) ['lorem' => 'caramba!', 'bar' => 'default']
 $da->undoTransform([]); // TypeError exception.
 ```
+ 
+## Class Diagram
+![Class Diagram](./shaper.png)
