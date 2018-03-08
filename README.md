@@ -92,7 +92,7 @@ class MyDataAdaptor extends DataAdaptorBase {
   protected function dotransform($data, Context $context) {
     return $data->{$context['keyName']};
   }
-  protected function doundoTransform($data, Context $context) {
+  protected function doUndoTransform($data, Context $context) {
     return (object) [$context['keyName'] => $data, 'bar' => 'default'];
   }
   public function getInputValidator() {
