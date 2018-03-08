@@ -11,36 +11,15 @@ use Shaper\Validator\AcceptValidator;
 use Shaper\Validator\JsonSchemaValidator;
 
 class TransformationFake2 extends TransformationBase {
-
   public function getInputValidator() {
     return new JsonSchemaValidator(['type' => 'number'], new Validator());
   }
-
   public function getOutputValidator() {
     $schema = ['type' => 'array', 'items' => ['type' => 'number']];
     return new JsonSchemaValidator($schema, new Validator());
   }
-
   protected function doTransform($data, Context $context) {
     return [$data];
-  }
-
-}
-
-class TransformationFail2 extends TransformationFake {
-
-  protected function validatorFactory($type) {
-    switch ($type) {
-      case static::BEFORE:
-      case static::AFTER:
-        return new JsonSchemaValidator(['type' => 'number'], new Validator());
-      default:
-        return new AcceptValidator();
-    }
-  }
-
-  protected function doTransform($data, Context $context) {
-    return 'bar';
   }
 }
 
@@ -75,6 +54,8 @@ class TransformationsQueueTest extends TestCase {
    */
   public function testTransform() {
     $actual = $this->sut->transform('foo', $this->context);
+    $this->assertEquals([42], $actual);
+    $actual = $this->sut->transform('foo');
     $this->assertEquals([42], $actual);
   }
 

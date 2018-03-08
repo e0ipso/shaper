@@ -9,7 +9,10 @@ trait TransformationTransformerTrait {
   /**
    * {@inheritdoc}
    */
-  public function transform($data, Context $context) {
+  public function transform($data, Context $context = NULL) {
+    if (!isset($context)) {
+      $context = new Context();
+    }
     if (!$this->conformsToExpectedInputShape($data, $context)) {
       throw new \TypeError(sprintf('Transformation %s received invalid input data.', __CLASS__));
     }

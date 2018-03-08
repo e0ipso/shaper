@@ -9,10 +9,12 @@ use Shaper\Validator\AcceptValidator;
 
 class DataAdaptorFake extends DataAdaptorBase {
   protected function doTransform($data, Context $context) {
-    return $data->{$context['key']};
+    $key = $context->offsetExists('key') ? $context['key'] : 'lorem';
+    return $data->{$key};
   }
   protected function doUndoTransform($data, Context $context) {
-    return (object) [$context['key'] => $data, 'bar' => 'default'];
+    $key = $context->offsetExists('key') ? $context['key'] : 'lorem';
+    return (object) [$key => $data, 'bar' => 'default'];
   }
   public function getInputValidator() {
     return new AcceptValidator();
@@ -28,19 +30,19 @@ class DataAdaptorFake extends DataAdaptorBase {
 }
 
 class DataAdaptorFake2 extends DataAdaptorFake {
-  public function conformsToExpectedInputShape($data, Context $context) {
+  public function conformsToExpectedInputShape($data, Context $context = NULL) {
     return FALSE;
   }
 }
 
 class DataAdaptorFake3 extends DataAdaptorFake {
-  public function conformsToInternalShape($data, Context $context) {
+  public function conformsToInternalShape($data, Context $context = NULL) {
     return FALSE;
   }
 }
 
 class DataAdaptorFake4 extends DataAdaptorFake {
-  public function conformsToOutputShape($data, Context $context) {
+  public function conformsToOutputShape($data, Context $context = NULL) {
     return FALSE;
   }
 }
@@ -100,7 +102,7 @@ class DataAdaptorBaseTest extends TestCase {
     $sut = new DataAdaptorFake3();
     $data = new \stdClass();
     $data->lorem = 'caramba!';
-    $sut->transform($data, $this->context);
+    $sut->transform($data);
   }
 
   /**
@@ -137,7 +139,7 @@ class DataAdaptorBaseTest extends TestCase {
     $expected = new \stdClass();
     $expected->lorem = 'caramba!';
     $expected->bar = 'default';
-    $sut->undoTransform('caramba!', $this->context);
+    $sut->undoTransform('caramba!');
   }
 
 }

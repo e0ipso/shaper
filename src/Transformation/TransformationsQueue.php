@@ -11,7 +11,10 @@ class TransformationsQueue extends \SplQueue implements TransformationInterface,
   /**
    * {@inheritdoc}
    */
-  public function transform($data, Context $context) {
+  public function transform($data, Context $context = NULL) {
+    if (!isset($context)) {
+      $context = new Context();
+    }
     $output = $data;
     foreach ($this as $transformation) {
       $output = $transformation->transform($output, $context);

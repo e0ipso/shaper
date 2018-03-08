@@ -18,7 +18,7 @@ interface ReversibleTransformationValidationInterface extends TransformationVali
    * @return bool
    *   TRUE if the format is valid.
    */
-  public function conformsToInternalShape($data, Context $context);
+  public function conformsToInternalShape($data, Context $context = NULL);
 
   /**
    * The validator for the internal data.

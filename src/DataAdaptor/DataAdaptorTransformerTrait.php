@@ -9,7 +9,10 @@ trait DataAdaptorTransformerTrait {
   /**
    * {@inheritdoc}
    */
-  public function transform($data, Context $context) {
+  public function transform($data, Context $context = NULL) {
+    if (!isset($context)) {
+      $context = new Context();
+    }
     if (!$this->conformsToExpectedInputShape($data, $context)) {
       throw new \TypeError(sprintf('Adaptor %s received invalid input data.', __CLASS__));
     }
@@ -23,7 +26,10 @@ trait DataAdaptorTransformerTrait {
   /**
    * {@inheritdoc}
    */
-  public function undoTransform($data, Context $context) {
+  public function undoTransform($data, Context $context = NULL) {
+    if (!isset($context)) {
+      $context = new Context();
+    }
     if (!$this->conformsToInternalShape($data, $context)) {
       throw new \TypeError(sprintf('Adaptor %s received invalid input data.', __CLASS__));
     }
