@@ -15,6 +15,8 @@ use Shaper\Util\Context;
  */
 abstract class DataAdaptorBase implements TransformationInterface, ReversibleTransformationInterface, ReversibleTransformationValidationInterface {
 
+  use DataAdaptorValidatorTrait;
+
   /**
    * {@inheritdoc}
    */
@@ -41,27 +43,6 @@ abstract class DataAdaptorBase implements TransformationInterface, ReversibleTra
       throw new \TypeError(sprintf('Adaptor %s returned invalid output data.', __CLASS__));
     }
     return $output;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function conformsToExpectedInputShape($data, Context $context) {
-    return $this->getInputValidator()->isValid($data);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function conformsToInternalShape($data, Context $context) {
-    return $this->getInternalValidator()->isValid($data);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function conformsToOutputShape($data, Context $context) {
-    return $this->getOutputValidator()->isValid($data);
   }
 
   /**
