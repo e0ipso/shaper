@@ -75,11 +75,11 @@ $t->transform($input, new Context(['keyName' => 'data'])); // ['data' => 42]
 
 ## Two-way Transformations (aka Data Adaptor)
 
-Data adaptors are useful when the data can flow in both directions. An example of this is an HTTP
-API that exposes an internal storage. However the internal storage format is not the format that the
-API wants to expose. For that data coming in needs to be transformed into the internal storage
-format, and data coming out needs to be transformed into the shape we want to expose to the outside
-world via our API.
+Data adaptors, or reversible transformations, are useful when the data can flow in both directions.
+An example of this is an HTTP API that exposes an internal storage. However the internal storage
+format is not the format that the API wants to expose. For that data coming in needs to be
+transformed into the internal storage format, and data coming out needs to be transformed into the
+shape we want to expose to the outside world via our API.
 
 ```php
 use JsonSchema\Validator;
@@ -89,10 +89,10 @@ use Shaper\Validator\InstanceofValidator;
 use Shaper\Validator\JsonSchemaValidator;
 
 class MyDataAdaptor extends DataAdaptorBase {
-  protected function doTransformIncomingData($data, Context $context) {
+  protected function dotransform($data, Context $context) {
     return $data->{$context['keyName']};
   }
-  protected function doTransformOutgoingData($data, Context $context) {
+  protected function doundoTransform($data, Context $context) {
     return (object) [$context['keyName'] => $data, 'bar' => 'default'];
   }
   public function getInputValidator() {
@@ -112,10 +112,10 @@ class MyDataAdaptor extends DataAdaptorBase {
 }
 
 $da = new MyDataAdaptor();
-$da->transformOutgoingData('caramba!', new Context(['keyName' => 'lorem'])); // (object) ['lorem' => 'caramba!', 'bar' => 'default']
-$da->transformOutgoingData([]); // TypeError exception.
 $data = new \stdClass();
 $data->lorem = 'caramba!';
-$da->transformIncomingData($data, new Context(['keyName' => 'lorem'])); // 'caramba!'
-$da->transformIncomingData(new NodeObject()); // TypeError exception.
+$da->transform($data, new Context(['keyName' => 'lorem'])); // 'caramba!'
+$da->transform(new NodeObject()); // TypeError exception.
+$da->undoTransform('caramba!', new Context(['keyName' => 'lorem'])); // (object) ['lorem' => 'caramba!', 'bar' => 'default']
+$da->undoTransform([]); // TypeError exception.
 ```

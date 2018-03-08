@@ -9,7 +9,7 @@ trait TransformationValidationTrait {
   /**
    * {@inheritdoc}
    */
-  public function conformsToInternalShape($data, Context $context) {
+  public function conformsToExpectedInputShape($data, Context $context) {
     return $this->getInputValidator()->isValid($data);
   }
 

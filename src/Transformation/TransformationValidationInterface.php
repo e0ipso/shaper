@@ -17,7 +17,7 @@ interface TransformationValidationInterface {
    * @return bool
    *   TRUE if the transformation can be used with the supplied data.
    */
-  public function conformsToInternalShape($data, Context $context);
+  public function conformsToExpectedInputShape($data, Context $context);
 
   /**
    * Checks if the transformed data conforms to the expected shape.

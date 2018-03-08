@@ -82,7 +82,7 @@ class TransformationsQueueTest extends TestCase {
    * @covers ::getInputValidator
    */
   public function testGetInputValidator() {
-    $this->assertFalse($this->sut->conformsToInternalShape([], $this->context));
+    $this->assertFalse($this->sut->conformsToExpectedInputShape([], $this->context));
   }
 
   /**

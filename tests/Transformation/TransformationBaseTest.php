@@ -58,7 +58,7 @@ class TransformationBaseTest extends TestCase {
    * @covers ::transform
    * @covers ::getInputValidator
    * @covers ::getOutputValidator
-   * @covers ::conformsToInternalShape
+   * @covers ::conformsToExpectedInputShape
    * @covers ::conformsToOutputShape
    */
   public function testTransform() {

@@ -2,6 +2,7 @@
 
 namespace Shaper\DataAdaptor;
 
+use Shaper\Transformation\TransformationInterface;
 use Shaper\Util\Context;
 
 /**
@@ -12,16 +13,16 @@ use Shaper\Util\Context;
  *
  * @package Shaper
  */
-abstract class DataAdaptorBase implements DataAdaptorInterface, DataAdaptorValidationInterface {
+abstract class DataAdaptorBase implements TransformationInterface, ReversibleTransformationInterface, ReversibleTransformationValidationInterface {
 
   /**
    * {@inheritdoc}
    */
-  public function transformIncomingData($data, Context $context) {
+  public function transform($data, Context $context) {
     if (!$this->conformsToExpectedInputShape($data, $context)) {
       throw new \TypeError(sprintf('Adaptor %s received invalid input data.', __CLASS__));
     }
-    $output = $this->doTransformIncomingData($data, $context);
+    $output = $this->doTransform($data, $context);
     if (!$this->conformsToInternalShape($output, $context)) {
       throw new \TypeError(sprintf('Adaptor %s returned invalid output data.', __CLASS__));
     }
@@ -31,11 +32,11 @@ abstract class DataAdaptorBase implements DataAdaptorInterface, DataAdaptorValid
   /**
    * {@inheritdoc}
    */
-  public function transformOutgoingData($data, Context $context) {
+  public function undoTransform($data, Context $context) {
     if (!$this->conformsToInternalShape($data, $context)) {
       throw new \TypeError(sprintf('Adaptor %s received invalid input data.', __CLASS__));
     }
-    $output = $this->doTransformOutgoingData($data, $context);
+    $output = $this->doUndoTransform($data, $context);
     if (!$this->conformsToOutputShape($output, $context)) {
       throw new \TypeError(sprintf('Adaptor %s returned invalid output data.', __CLASS__));
     }
@@ -79,7 +80,7 @@ abstract class DataAdaptorBase implements DataAdaptorInterface, DataAdaptorValid
    * @throws \TypeError
    *   When the transformation cannot be applied.
    */
-  abstract protected function doTransformIncomingData($data, Context $context);
+  abstract protected function doTransform($data, Context $context);
 
   /**
    * Transforms outgoing data into another shape.
@@ -97,6 +98,6 @@ abstract class DataAdaptorBase implements DataAdaptorInterface, DataAdaptorValid
    * @throws \TypeError
    *   When the transformation cannot be applied.
    */
-  abstract protected function doTransformOutgoingData($data, Context $context);
+  abstract protected function doUndoTransform($data, Context $context);
 
 }
