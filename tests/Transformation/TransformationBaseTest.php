@@ -60,28 +60,28 @@ class TransformationBaseTest extends TestCase {
    * @covers ::getOutputValidator
    * @covers ::conformsToExpectedInputShape
    * @covers ::conformsToOutputShape
+   * @expectedException \TypeError
    */
   public function testTransform() {
     $actual = $this->sut->transform('foo', $this->context);
     $this->assertSame(42, $actual);
-    $this->expectException(\TypeError::class);
     $this->sut->transform([], $this->context);
   }
 
   /**
    * @covers ::transform
+   * @expectedException \TypeError
    */
   public function testTransformBeforeError() {
-    $this->expectException(\TypeError::class);
     $this->sut->transform([], $this->context);
   }
 
   /**
    * @covers ::transform
+   * @expectedException \TypeError
    */
   public function testTransformAfterError() {
     $sut = new TransformationFail();
-    $this->expectException(\TypeError::class);
     $sut->transform('foo', $this->context);
   }
 

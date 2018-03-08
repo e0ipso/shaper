@@ -83,23 +83,23 @@ class DataAdaptorBaseTest extends TestCase {
 
   /**
    * @covers ::transform
+   * @expectedException \TypeError
    */
   public function testtransformErrorInput() {
     $sut = new DataAdaptorFake2();
     $data = new \stdClass();
     $data->lorem = 'caramba!';
-    $this->expectException(\TypeError::class);
     $sut->transform($data, $this->context);
   }
 
   /**
    * @covers ::transform
+   * @expectedException \TypeError
    */
   public function testtransformErrorOutput() {
     $sut = new DataAdaptorFake3();
     $data = new \stdClass();
     $data->lorem = 'caramba!';
-    $this->expectException(\TypeError::class);
     $sut->transform($data, $this->context);
   }
 
@@ -118,25 +118,25 @@ class DataAdaptorBaseTest extends TestCase {
 
   /**
    * @covers ::undoTransform
+   * @expectedException \TypeError
    */
   public function testundoTransformErrorInput() {
     $sut = new DataAdaptorFake3();
     $expected = new \stdClass();
     $expected->lorem = 'caramba!';
     $expected->bar = 'default';
-    $this->expectException(\TypeError::class);
     $sut->undoTransform('caramba!', $this->context);
   }
 
   /**
    * @covers ::undoTransform
+   * @expectedException \TypeError
    */
   public function testundoTransformErrorOutput() {
     $sut = new DataAdaptorFake4();
     $expected = new \stdClass();
     $expected->lorem = 'caramba!';
     $expected->bar = 'default';
-    $this->expectException(\TypeError::class);
     $sut->undoTransform('caramba!', $this->context);
   }
 
