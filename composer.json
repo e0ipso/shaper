@@ -13,7 +13,7 @@
   "autoload": {
     "psr-4": {
       "Shaper\\": "src",
-      "Shaper\\Tests\\": "tests"
+      "Shaper\\Tests\\": "tests/src"
     }
   },
   "require": {

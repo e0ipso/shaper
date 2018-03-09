@@ -21,6 +21,13 @@ class JsonSchemaValidator implements ValidateableInterface {
   protected $validator;
 
   /**
+   * The check mode flag for the JSON Schema validator.
+   *
+   * @var int
+   */
+  protected $checkMode;
+
+  /**
    * JsonSchema constructor.
    *
    * @param array $schema
@@ -28,9 +35,10 @@ class JsonSchemaValidator implements ValidateableInterface {
    * @param \JsonSchema\Validator $validator
    *   The validator.
    */
-  public function __construct(array $schema = NULL, Validator $validator = NULL) {
+  public function __construct(array $schema = NULL, Validator $validator = NULL, $mode = NULL) {
     $this->schema = $schema;
     $this->validator = $validator;
+    $this->checkMode = $mode;
   }
 
   /**
@@ -60,7 +68,7 @@ class JsonSchemaValidator implements ValidateableInterface {
     if (!$this->validator) {
       throw new \InvalidArgumentException('JSON Schema validator needs to be set using setValidator().');
     }
-    return !$this->validator->check($data, $this->schema);
+    return !$this->validator->validate($data, $this->schema, $this->checkMode);
   }
 
   /**
