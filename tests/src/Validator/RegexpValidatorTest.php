@@ -20,6 +20,13 @@ class RegexpValidatorTest extends TestCase {
   public function testIsValid($data, $expected) {
     $sut = new RegexpValidator('^d.*e$');
     $this->assertSame($expected, $sut->isValid($data));
+    if (!$expected) {
+      $message = sprintf(
+        'String "%s" does not match regular expression /^d.*e$/ as expected.',
+        $data
+      );
+      $this->assertSame($message, $sut->getErrors()[0]);
+    }
   }
 
   /**

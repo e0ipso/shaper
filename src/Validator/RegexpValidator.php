@@ -4,7 +4,7 @@ namespace Shaper\Validator;
 
 use JsonSchema\Validator;
 
-class RegexpValidator implements ValidateableInterface {
+class RegexpValidator extends ValidateableBase {
 
   /**
    * The name of the class or interface the data must comply.
@@ -35,8 +35,18 @@ class RegexpValidator implements ValidateableInterface {
    * {@inheritdoc}
    */
   public function isValid($data) {
-    return $this->stringValidator->isValid($data) &&
+    $this->resetErrors();
+    $matches_regexp = $this->stringValidator->isValid($data) &&
       preg_match('@' . $this->regexp . '@', $data);
+    if (!$matches_regexp) {
+      $message = sprintf(
+        'String "%s" does not match regular expression /%s/ as expected.',
+        $data,
+        $this->regexp
+      );
+      array_push($this->errors, $message);
+    }
+    return $matches_regexp;
   }
 
 }

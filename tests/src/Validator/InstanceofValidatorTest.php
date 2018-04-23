@@ -34,6 +34,10 @@ class InstanceofValidatorTest extends TestCase {
   public function testIsValid() {
     $sut = new InstanceofValidator(\stdClass::class);
     $this->assertTrue($sut->isValid(new \stdClass()));
+    $this->assertFalse($sut->isValid(new \Exception()));
+    $this->assertSame('"Exception" does not extend or implement "stdClass".', $sut->getErrors()[0]);
+    $this->assertFalse($sut->isValid('42'));
+    $this->assertSame('"42" does not extend or implement "stdClass".', $sut->getErrors()[0]);
   }
 
 }

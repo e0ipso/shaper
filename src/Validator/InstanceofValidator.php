@@ -2,7 +2,7 @@
 
 namespace Shaper\Validator;
 
-class InstanceofValidator implements ValidateableInterface {
+class InstanceofValidator extends ValidateableBase {
 
   /**
    * The name of the class or interface the data must comply.
@@ -35,7 +35,17 @@ class InstanceofValidator implements ValidateableInterface {
    * {@inheritdoc}
    */
   public function isValid($data) {
-    return is_a($data, $this->supportedClassOrInterface);
+    $this->resetErrors();
+    $is_valid = is_a($data, $this->supportedClassOrInterface);
+    if (!$is_valid) {
+      $message = sprintf(
+        '"%s" does not extend or implement "%s".',
+        is_object($data) ? get_class($data) : $data,
+        $this->supportedClassOrInterface
+      );
+      array_push($this->errors, $message);
+    }
+    return $is_valid;
   }
 
 }

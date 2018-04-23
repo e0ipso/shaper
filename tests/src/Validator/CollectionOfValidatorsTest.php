@@ -36,7 +36,9 @@ class CollectionOfValidatorsTest extends TestCase {
     $sut = new CollectionOfValidators(new InstanceofValidator(\stdClass::class));
     $this->assertTrue($sut->isValid([new \stdClass(), new \stdClass()]));
     $this->assertFalse($sut->isValid([new \stdClass(), 'fail']));
+    $this->assertSame('"fail" does not extend or implement "stdClass".', $sut->getErrors()[0]);
     $this->assertFalse($sut->isValid(new \stdClass()));
+    $this->assertSame('Collection of validators only applies on data arrays.', $sut->getErrors()[0]);
   }
 
 }

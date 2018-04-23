@@ -4,7 +4,7 @@ namespace Shaper\Validator;
 
 use JsonSchema\Validator;
 
-class JsonSchemaValidator implements ValidateableInterface {
+class JsonSchemaValidator extends ValidateableBase {
 
   /**
    * The JSON object with the schema.
@@ -65,10 +65,15 @@ class JsonSchemaValidator implements ValidateableInterface {
    * {@inheritdoc}
    */
   public function isValid($data) {
+    $this->resetErrors();
     if (!$this->validator) {
       throw new \InvalidArgumentException('JSON Schema validator needs to be set using setValidator().');
     }
-    return !$this->validator->validate($data, $this->schema, $this->checkMode);
+    $num_errors = $this->validator->validate($data, $this->schema, $this->checkMode);
+    if ($num_errors) {
+      $this->errors = array_merge($this->errors, $this->validator->getErrors());
+    }
+    return !$num_errors;
   }
 
   /**
@@ -78,7 +83,7 @@ class JsonSchemaValidator implements ValidateableInterface {
    *   The names of the properties to serialize.
    */
   public function __sleep() {
-    return ['schema'];
+    return ['schema', 'errors'];
   }
 
   /**
@@ -86,6 +91,16 @@ class JsonSchemaValidator implements ValidateableInterface {
    */
   public function __wakeup() {
     $this->setValidator(new Validator());
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function resetErrors() {
+    if ($this->validator) {
+      $this->validator->reset();
+    }
+    $this->errors = [];
   }
 
 }

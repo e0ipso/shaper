@@ -39,6 +39,7 @@ class JsonSchemaValidatorTest extends TestCase {
     $sut->setValidator(new Validator());
     $this->assertTrue($sut->isValid(42));
     $this->assertFalse($sut->isValid('not true'));
+    $this->assertSame('String value found, but a number is required', $sut->getErrors()[0]['message']);
   }
 
   /**

@@ -2,7 +2,7 @@
 
 namespace Shaper\Validator;
 
-class CollectionOfValidators implements ValidateableInterface {
+class CollectionOfValidators extends ValidateableBase {
 
   /**
    * The name of the class or interface the data must comply.
@@ -28,12 +28,19 @@ class CollectionOfValidators implements ValidateableInterface {
    * {@inheritdoc}
    */
   public function isValid($data) {
+    $this->resetErrors();
     if (!is_array($data)) {
+      array_push($this->errors, 'Collection of validators only applies on data arrays.');
       return FALSE;
     }
     // The collection is valid if all the items are valid.
     return array_reduce($data, function ($is_valid, $item) {
-      return $is_valid && $this->itemValidator->isValid($item);
+      $valid_item = TRUE;
+      $is_valid = $is_valid && ($valid_item = $this->itemValidator->isValid($item));
+      if (!$valid_item) {
+        $this->errors = array_merge($this->errors, $this->itemValidator->getErrors());
+      }
+      return $is_valid;
     }, TRUE);
   }
 

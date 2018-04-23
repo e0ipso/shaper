@@ -13,7 +13,7 @@ namespace Shaper\Validator;
  *
  * @package Shaper
  */
-class AcceptValidator implements ValidateableInterface {
+class AcceptValidator extends ValidateableBase {
 
   /**
    * {@inheritdoc}
