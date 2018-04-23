@@ -19,7 +19,7 @@ trait TransformationTransformerTrait {
       $message = sprintf(
         'Adaptor %s received invalid input data: %s',
         __CLASS__,
-        serialize($validator->getErrors())
+        json_encode($validator->getErrors(), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT)
       );
       throw new \TypeError($message);
     }
@@ -30,7 +30,7 @@ trait TransformationTransformerTrait {
       $message = sprintf(
         'Adaptor %s returned invalid output data: %s',
         __CLASS__,
-        serialize($validator->getErrors())
+        json_encode($validator->getErrors(), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT)
       );
       throw new \TypeError($message);
     }
