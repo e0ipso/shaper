@@ -14,11 +14,25 @@ trait DataAdaptorTransformerTrait {
       $context = new Context();
     }
     if (!$this->conformsToExpectedInputShape($data, $context)) {
-      throw new \TypeError(sprintf('Adaptor %s received invalid input data.', __CLASS__));
+      /** @var \Shaper\Validator\ValidateableInterface $validator */
+      $validator = $this->getInputValidator();
+      $message = sprintf(
+        'Adaptor %s received invalid input data: %s',
+        __CLASS__,
+        serialize($validator->getErrors())
+      );
+      throw new \TypeError($message);
     }
     $output = $this->doTransform($data, $context);
     if (!$this->conformsToInternalShape($output, $context)) {
-      throw new \TypeError(sprintf('Adaptor %s returned invalid output data.', __CLASS__));
+      /** @var \Shaper\Validator\ValidateableInterface $validator */
+      $validator = $this->getInternalValidator();
+      $message = sprintf(
+        'Adaptor %s returned invalid output data: %s',
+        __CLASS__,
+        serialize($validator->getErrors())
+      );
+      throw new \TypeError($message);
     }
     return $output;
   }
@@ -31,11 +45,25 @@ trait DataAdaptorTransformerTrait {
       $context = new Context();
     }
     if (!$this->conformsToInternalShape($data, $context)) {
-      throw new \TypeError(sprintf('Adaptor %s received invalid input data.', __CLASS__));
+      /** @var \Shaper\Validator\ValidateableInterface $validator */
+      $validator = $this->getInternalValidator();
+      $message = sprintf(
+        'Adaptor %s received invalid input data: %s',
+        __CLASS__,
+        serialize($validator->getErrors())
+      );
+      throw new \TypeError($message);
     }
     $output = $this->doUndoTransform($data, $context);
     if (!$this->conformsToOutputShape($output, $context)) {
-      throw new \TypeError(sprintf('Adaptor %s returned invalid output data.', __CLASS__));
+      /** @var \Shaper\Validator\ValidateableInterface $validator */
+      $validator = $this->getOutputValidator();
+      $message = sprintf(
+        'Adaptor %s returned invalid output data: %s',
+        __CLASS__,
+        serialize($validator->getErrors())
+      );
+      throw new \TypeError($message);
     }
     return $output;
   }
