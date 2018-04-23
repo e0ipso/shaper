@@ -17,7 +17,7 @@ trait TransformationTransformerTrait {
       /** @var \Shaper\Validator\ValidateableInterface $validator */
       $validator = $this->getInputValidator();
       $message = sprintf(
-        'Adaptor %s returned invalid input data: %s',
+        'Adaptor %s received invalid input data: %s',
         __CLASS__,
         serialize($validator->getErrors())
       );

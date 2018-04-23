@@ -93,6 +93,13 @@ class JsonSchemaValidator extends ValidateableBase {
     $this->setValidator(new Validator());
   }
 
+  public function getErrors() {
+    if ($this->validator) {
+      return $this->validator->getErrors();
+    }
+    return parent::getErrors();
+  }
+
   /**
    * {@inheritdoc}
    */
