@@ -15,24 +15,24 @@ trait TransformationTransformerTrait {
     }
 
     // Error utility.
-    $throwError = function($message, $arguments = []) {
+    $throw = function($message, $arguments = []) {
       /** @var \Shaper\Validator\ValidateableInterface $validator */
       $validator = $this->getInputValidator();
-      $jsonEncodeOptions = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT;
+      $options = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT;
 
       throw new \TypeError(strtr($message, $arguments + [
         '{class}' => static::class,
-        '{data}' => json_encode($validator->getErrors(), $jsonEncodeOptions)
+        '{data}' => json_encode($validator->getErrors(), $options)
       ]));
     };
 
     if (!$this->conformsToExpectedInputShape($data, $context)) {
-      $throwError('Adaptor {class} received invalid input data: {data}.');
+      $throw('Adaptor {class} received invalid input data: {data}.');
     }
 
     $output = $this->doTransform($data, $context);
     if (!$this->conformsToOutputShape($output, $context)) {
-      $throwError('Adaptor {class} returned invalid output data: {data}');
+      $throw('Adaptor {class} returned invalid output data: {data}');
     }
 
     return $output;
