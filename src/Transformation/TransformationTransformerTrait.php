@@ -13,27 +13,28 @@ trait TransformationTransformerTrait {
     if (!isset($context)) {
       $context = new Context();
     }
-    if (!$this->conformsToExpectedInputShape($data, $context)) {
+
+    // Error utility.
+    $throw = function($message, $arguments = []) {
       /** @var \Shaper\Validator\ValidateableInterface $validator */
       $validator = $this->getInputValidator();
-      $message = sprintf(
-        'Adaptor %s received invalid input data: %s',
-        __CLASS__,
-        json_encode($validator->getErrors(), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT)
-      );
-      throw new \TypeError($message);
+      $options = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT;
+
+      throw new \TypeError(strtr($message, $arguments + [
+        '{class}' => static::class,
+        '{data}' => json_encode($validator->getErrors(), $options)
+      ]));
+    };
+
+    if (!$this->conformsToExpectedInputShape($data, $context)) {
+      $throw('Adaptor {class} received invalid input data: {data}.');
     }
+
     $output = $this->doTransform($data, $context);
     if (!$this->conformsToOutputShape($output, $context)) {
-      /** @var \Shaper\Validator\ValidateableInterface $validator */
-      $validator = $this->getOutputValidator();
-      $message = sprintf(
-        'Adaptor %s returned invalid output data: %s',
-        __CLASS__,
-        json_encode($validator->getErrors(), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT)
-      );
-      throw new \TypeError($message);
+      $throw('Adaptor {class} returned invalid output data: {data}');
     }
+
     return $output;
   }
 
