@@ -76,6 +76,8 @@ class JsonSchemaValidatorTest extends TestCase {
      'constraint' => 'type',
      'context' => 1,
     ]], $sut->getErrors());
+    $sut = new JsonSchemaValidator(['type' => 'number']);
+    $this->assertEquals([], $sut->getErrors());
   }
 
   /**
