@@ -62,4 +62,32 @@ class JsonSchemaValidatorTest extends TestCase {
     $this->assertInstanceOf(JsonSchemaValidator::class, $sut);
   }
 
+  /**
+   * @covers ::getErrors
+   */
+  public function testGetErrors() {
+    $sut = new JsonSchemaValidator(['type' => 'number']);
+    $sut->setValidator(new Validator());
+    $sut->isValid(NULL);
+    $this->assertEquals([[
+     'property' => '',
+     'pointer' => '',
+     'message' => 'NULL value found, but a number is required',
+     'constraint' => 'type',
+     'context' => 1,
+    ]], $sut->getErrors());
+  }
+
+  /**
+   * @covers ::resetErrors
+   */
+  public function testResetErrors() {
+    $sut = new JsonSchemaValidator(['type' => 'number']);
+    $sut->setValidator(new Validator());
+    $sut->isValid(NULL);
+    $this->assertNotEmpty($sut->getErrors()[0]);
+    $sut->resetErrors();
+    $this->assertEmpty($sut->getErrors());
+  }
+
 }
