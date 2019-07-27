@@ -89,7 +89,7 @@ use Shaper\Validator\InstanceofValidator;
 use Shaper\Validator\JsonSchemaValidator;
 
 class MyDataAdaptor extends DataAdaptorBase {
-  protected function dotransform($data, Context $context) {
+  protected function doTransform($data, Context $context) {
     return $data->{$context['keyName']};
   }
   protected function doUndoTransform($data, Context $context) {
