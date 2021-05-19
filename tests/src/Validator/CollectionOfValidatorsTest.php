@@ -23,9 +23,9 @@ class CollectionOfValidatorsTest extends TestCase {
 
   /**
    * @covers ::__construct
-   * @expectedException \TypeError
    */
   public function test__constructError() {
+    $this->expectException(\TypeError::class);
     new CollectionOfValidators('IAmAFail');
   }
 
