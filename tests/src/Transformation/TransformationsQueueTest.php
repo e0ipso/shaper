@@ -40,7 +40,7 @@ class TransformationsQueueTest extends TestCase {
    */
   protected $context;
 
-  protected function setUp()/* The :void return type declaration that should be here would cause a BC issue */ {
+  protected function setUp(): void {
     parent::setUp();
     $this->sut = new TransformationsQueue();
     $this->sut->push(new TransformationFake());

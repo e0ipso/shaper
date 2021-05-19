@@ -1,12 +1,12 @@
 language: php
 php:
-  - 7.1
-  - 7.2
-  - 7.3
+  - 7.4
+  - 8.0
 
 before_script:
   - mkdir -p build/logs
   - composer install --no-interaction
+  - echo "xdebug.mode = coverage" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 script:
   - php vendor/bin/phpunit

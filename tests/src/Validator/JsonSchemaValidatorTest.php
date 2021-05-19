@@ -44,10 +44,10 @@ class JsonSchemaValidatorTest extends TestCase {
 
   /**
    * @covers ::isValid
-   * @expectedException \InvalidArgumentException
    */
   public function testIsValidError() {
     $sut = new JsonSchemaValidator(['type' => 'number']);
+    $this->expectException(\InvalidArgumentException::class);
     $this->assertTrue($sut->isValid(NULL));
   }
 
