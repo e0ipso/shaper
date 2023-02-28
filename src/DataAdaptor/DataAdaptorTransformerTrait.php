@@ -16,6 +16,8 @@ trait DataAdaptorTransformerTrait {
     if (!$this->conformsToExpectedInputShape($data, $context)) {
       /** @var \Shaper\Validator\ValidateableInterface $validator */
       $validator = $this->getInputValidator();
+      // Collect all validation errors (again).
+      $validator->isValid();
       $message = sprintf(
         'Adaptor %s received invalid input data: %s',
         __CLASS__,
