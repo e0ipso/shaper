@@ -9,7 +9,7 @@ trait DataAdaptorTransformerTrait {
   /**
    * {@inheritdoc}
    */
-  public function transform($data, Context $context = NULL) {
+  public function transform($data, ?Context $context = NULL) {
     if (!isset($context)) {
       $context = new Context();
     }
@@ -40,7 +40,7 @@ trait DataAdaptorTransformerTrait {
   /**
    * {@inheritdoc}
    */
-  public function undoTransform($data, Context $context = NULL) {
+  public function undoTransform($data, ?Context $context = NULL) {
     if (!isset($context)) {
       $context = new Context();
     }
